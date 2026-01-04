@@ -11,4 +11,3 @@ export const useAuthStore = create<AuthState>((set) => ({
   signIn: () => set({ isAuthenticated: true }),
   signOut: () => set({ isAuthenticated: false }),
 }));
-

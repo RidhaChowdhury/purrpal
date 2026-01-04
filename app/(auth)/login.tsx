@@ -12,35 +12,42 @@ export default function LoginScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/(tabs)');
+    if (isAuthenticated && router && typeof router.replace === 'function') {
+      try {
+        router.replace('/(tabs)');
+      } catch (error) {
+        console.error('Failed to navigate to /(tabs):', error);
+      }
     }
   }, [isAuthenticated, router]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white items-center justify-center p-6">
+    <SafeAreaView className="flex-1 items-center justify-center bg-white p-6">
       <MotiView
         from={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', duration: 1000 }}
-        className="items-center"
-      >
-        <View className="bg-blue-50 p-6 rounded-full mb-6">
+        className="items-center">
+        <View className="mb-6 rounded-full bg-blue-50 p-6">
           <LogIn size={48} color="#2563eb" />
         </View>
-        <Text className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</Text>
-        <Text className="text-gray-500 text-center mb-10 px-4">
+        <Text className="mb-2 text-3xl font-bold text-gray-900">Welcome Back</Text>
+        <Text className="mb-10 px-4 text-center text-gray-500">
           This is a dummy auth flow. Press the button below to get started.
         </Text>
 
         <Pressable
           onPress={signIn}
-          className="bg-blue-600 w-full px-4 py-4 rounded-2xl items-center active:opacity-90 active:scale-[0.98] transition-all"
-        >
-          <Text className="text-white font-bold text-lg">Sign In</Text>
+          className="w-full items-center rounded-2xl bg-blue-600 px-4 py-4 transition-all"
+          style={({ pressed }) => [
+            {
+              transform: [{ scale: pressed ? 0.98 : 1 }],
+              opacity: pressed ? 0.9 : 1,
+            },
+          ]}>
+          <Text className="text-lg font-bold text-white">Sign In</Text>
         </Pressable>
       </MotiView>
     </SafeAreaView>
   );
 }
-
